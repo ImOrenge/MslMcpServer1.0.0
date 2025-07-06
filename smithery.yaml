@@ -4,8 +4,9 @@ metadata:
   name: msl-mcp-server
   version: "1.0.0"
   description: "MSL (Macro Scripting Language) MCP Server with OpenAI Integration"
-  author: "MSL Development Team"
+  author: "ImOrenge"
   license: "MIT"
+  repository: "https://github.com/ImOrenge/MslMcpServer1.0.0"
   tags:
     - macro
     - scripting
@@ -16,65 +17,93 @@ metadata:
     - ai-powered
 
 spec:
-  # 서버 기본 설정
-  server:
-    name: "MSL MCP Server"
-    description: "AI-powered MSL script generation and analysis server"
-    version: "1.0.0"
-    
-  # 런타임 설정
-  runtime:
-    type: "docker"
-    image: "msl-mcp-server:latest"
-    build:
-      context: "."
-      dockerfile: "Dockerfile"
-    
+  # 서버 실행 설정
+  command: ["python", "server.py"]
+  
   # 환경변수 설정
-  environment:
-    required:
-      - name: "OPENAI_API_KEY"
-        description: "OpenAI API key for AI-powered MSL generation"
-        type: "secret"
-    optional:
-      - name: "MSL_OPENAI_MODEL"
-        description: "OpenAI model to use (default: gpt-4o)"
-        default: "gpt-4o"
-      - name: "MSL_DEBUG"
-        description: "Enable debug mode"
-        default: "false"
-      - name: "MSL_MAX_CONCURRENT_REQUESTS"
-        description: "Maximum concurrent requests"
-        default: "10"
+  env:
+    OPENAI_API_KEY:
+      description: "OpenAI API key for AI-powered MSL generation"
+      required: true
+      secret: true
+    MSL_OPENAI_MODEL:
+      description: "OpenAI model to use"
+      default: "gpt-4o"
+    MSL_DEBUG:
+      description: "Enable debug mode"
+      default: "false"
 
-  # MCP 도구 정의
+  # MCP 도구들
   tools:
     - name: "parse_msl"
-      description: "Parse and analyze MSL scripts with syntax validation"
-      category: "analysis"
+      description: "Parse and analyze MSL scripts with syntax validation and AST generation"
       
-    - name: "generate_msl"
-      description: "Generate MSL scripts from natural language prompts using AI"
-      category: "generation"
-      ai_powered: true
+    - name: "generate_msl" 
+      description: "Generate MSL scripts from natural language using OpenAI GPT-4o"
       
     - name: "validate_msl"
-      description: "Validate MSL scripts for syntax, performance, and safety"
-      category: "validation"
+      description: "Validate MSL scripts for syntax errors, performance issues, and safety"
       
     - name: "optimize_msl"
-      description: "Optimize MSL scripts for better performance and readability"
-      category: "optimization"
-      ai_powered: true
+      description: "Optimize MSL scripts for better performance using AI analysis"
       
     - name: "explain_msl"
-      description: "Generate educational explanations for MSL scripts"
-      category: "education"
-      ai_powered: true
+      description: "Generate educational explanations for MSL scripts for beginners"
       
     - name: "msl_examples"
-      description: "Provide categorized MSL script examples for learning"
-      category: "examples"
+      description: "Provide categorized MSL script examples by game type and complexity"
+
+  # 지원되는 파일 형식
+  fileTypes:
+    - ".msl"
+    - ".txt"
+
+  # 프로젝트 정보
+  homepage: "https://github.com/ImOrenge/MslMcpServer1.0.0"
+  documentation: "https://github.com/ImOrenge/MslMcpServer1.0.0/wiki"
+  issues: "https://github.com/ImOrenge/MslMcpServer1.0.0/issues"
+  
+  # 런타임 요구사항
+  runtime:
+    python: ">=3.11"
+    
+  # 예제 사용법
+  examples:
+    - title: "Generate Game Macro"
+      description: "Create a combat macro for FPS games"
+      code: |
+        {
+          "tool": "generate_msl",
+          "arguments": {
+            "prompt": "Create a macro that presses Q then waits 500ms then presses W",
+            "game_context": "FPS",
+            "complexity": "simple"
+          }
+        }
+        
+    - title: "Optimize Script"
+      description: "Optimize an existing MSL script"
+      code: |
+        {
+          "tool": "optimize_msl", 
+          "arguments": {
+            "script": "Q,(500),W,(500),E",
+            "level": "standard",
+            "target": "performance"
+          }
+        }
+        
+    - title: "Explain Script"
+      description: "Get educational explanation of MSL syntax"
+      code: |
+        {
+          "tool": "explain_msl",
+          "arguments": {
+            "script": "Q+Shift,(100),W*3",
+            "audience": "beginner",
+            "include_tips": true
+          }
+        }
 
   # 지원되는 언어
   languages:
